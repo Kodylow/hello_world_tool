@@ -1,0 +1,9 @@
+[package]
+name = "hello_world_tool"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+axum = "0.7.5"
+tokio = { version = "1.38.0", features = ["full"] }
