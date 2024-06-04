@@ -17,3 +17,31 @@ async fn main() -> Result<(), anyhow::Error> {
 async fn hello_world() -> &'static str {
     "Hello, World!"
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use axum::http::StatusCode;
+    use reqwest::Client;
+
+    async fn setup_server() -> String {
+        let app = Router::new().route("/", get(hello_world));
+        let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
+        let addr = listener.local_addr().unwrap().to_string();
+        tokio::spawn(async move {
+            axum::serve(listener, app).await.unwrap();
+        });
+        addr
+    }
+
+    #[tokio::test]
+    async fn test_hello_world() {
+        let addr = setup_server().await;
+
+        let client = Client::new();
+        let res = client.get(format!("http://{}", addr)).send().await.unwrap();
+
+        assert_eq!(res.status(), StatusCode::OK);
+        assert_eq!(res.text().await.unwrap(), "Hello, World!");
+    }
+}

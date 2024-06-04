@@ -8,4 +8,5 @@ description = "An agent tool for a hello world axum server"
 [dependencies]
 anyhow = "1.0.86"
 axum = "0.7.5"
+reqwest = "0.12.4"
 tokio = { version = "1.38.0", features = ["full"] }
