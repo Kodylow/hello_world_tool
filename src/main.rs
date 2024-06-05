@@ -28,6 +28,7 @@ mod tests {
         let app = Router::new().route("/", get(hello_world));
         let listener = TcpListener::bind("127.0.0.1:0").await.unwrap();
         let addr = listener.local_addr().unwrap().to_string();
+        println!("Tool listening on {}", addr);
         tokio::spawn(async move {
             axum::serve(listener, app).await.unwrap();
         });
